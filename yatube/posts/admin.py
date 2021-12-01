@@ -1,9 +1,10 @@
 from django.contrib import admin
-from .models import Post, Group
+
+from .models import Group, Post
 
 
 class GroupAdmin(admin.ModelAdmin):
-    list_display_group = ('pk', 'text', 'pub_date',)
+    list_display_group = ('pk', 'text',)
     search_fields_group = ('text',)
     list_filter_group = ('pub_date',)
     empty_value_display = '-пусто-'

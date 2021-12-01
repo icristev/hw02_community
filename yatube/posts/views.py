@@ -1,25 +1,13 @@
 from django.shortcuts import get_object_or_404, render
-from .models import Post, Group
+
+from .models import Group, Post
 
 
 def index(request):
     posts = Post.objects.all()[:10]
     template = 'posts/index.html'
-    title = 'Последние обновления на сайте'
     context = {
-        'title': title,
         'posts': posts,
-    }
-    return render(request, template, context)
-
-
-def group_list(request):
-    template = 'posts/group_list.html'
-    title = 'Список групп'
-    text = 'Информация о группах проекта Yatube'
-    context = {
-        'text': text,
-        'title': title,
     }
     return render(request, template, context)
 
