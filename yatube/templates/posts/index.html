@@ -1,34 +1,32 @@
 {% extends 'base.html' %}
-<head>
-  {% block title %}
-    Это главная страница проекта Yatube
-  {% endblock title%}
-</head>
-<body>
-  <main>
-    <div class="container py-5">
-      {% block content %}
-      <h1 style="margin-top: 48px"> Последние обновления на сайте</h1>
-      <article>
-        {% for post in posts %}
-          <ul>
-            <li>
-              Автор: {{ post.author.get_full_name }}
-            </li>
-            <li>
-              Дата публикации: {{ post.pub_date|date:"d E Y" }}
-            </li>
-          </ul>
-        <p>
-          {{ post.text }}
-        </p>
-        {% if post.group.slug is not None %}
-            <a href="{% url 'posts:group_list' post.group.slug %}"> все записи группы </a>
-        {% endif %}
-        {% if not forloop.last %}<hr>{% endif %}
-        {% endfor %}
-      </article>
-      {% endblock %}
-    </div>
-  </main>
-</body>
+
+{% block title %}
+  Это главная страница проекта Yatube
+{% endblock title%}
+
+<div class="container py-5">
+  {% block content %}
+    <h1 style="margin-top: 48px"> Последние обновления на сайте</h1>
+    <article>
+      {% for post in posts %}
+        <ul>
+          <li>
+            Автор: {{ post.author.get_full_name }}
+          </li>
+          <li>
+            Дата публикации: {{ post.pub_date|date:"d E Y" }}
+          </li>
+        </ul>
+      <p>
+        {{ post.text }}
+      </p>
+      {% if post.group.slug is not None %}
+        <a href="{% url 'posts:group_list' post.group.slug %}"> все записи группы </a>
+      {% endif %}
+      {% if not forloop.last %}<hr>{% endif %}
+      {% endfor %}
+    </article>
+  {% endblock %}
+</div>
+
+
