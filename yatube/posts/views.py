@@ -13,7 +13,7 @@ def index(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     context = {
-        'posts': page_obj,
+        'page_obj': page_obj,
     }
     return render(request, template, context)
 
@@ -26,7 +26,7 @@ def group_posts(request, slug):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     context = {
-        'posts': page_obj,
+        'page_obj': page_obj,
         'group': group,
     }
     return render(request, template, context)
