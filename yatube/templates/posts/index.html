@@ -1,32 +1,32 @@
-{% extends 'base.html' %}
-
+{% extends 'base.html' %} 
 {% block title %}
   Это главная страница проекта Yatube
 {% endblock title%}
-
-<div class="container py-5">
-  {% block content %}
-    <h1 style="margin-top: 48px"> Последние обновления на сайте</h1>
+</head>
+<body>
+<main>
+  <div class="container py-5">
+    {% block content %}
+      <h1>Последние обновления на сайте</h1>
     <article>
-      {% for post in posts %}
-        <ul>
-          <li>
-            Автор: {{ post.author.get_full_name }}
-          </li>
-          <li>
-            Дата публикации: {{ post.pub_date|date:"d E Y" }}
-          </li>
-        </ul>
+    {% for post in posts %}
+      <ul>
+        <li>
+          Автор: {{ post.author.get_full_name }}
+        </li>
+        <li>
+          Дата публикации: {{ post.pub_date|date:"d E Y" }}
+        </li>
+      </ul>      
       <p>
         {{ post.text }}
       </p>
-      {% if post.group.slug is not None %}
-        <a href="{% url 'posts:group_list' post.group.slug %}"> все записи группы </a>
-      {% endif %}
+      {% if post.group.slug %}
+        <a href="{% url 'posts:group_list' post.group.slug %}">все записи группы</a>
+      {% endif%}
       {% if not forloop.last %}<hr>{% endif %}
-      {% endfor %}
+    {% endfor %} 
     </article>
-  {% endblock %}
-</div>
-
-
+  </div>
+  {% include 'includes/paginator.html' %}
+   {% endblock %}  
