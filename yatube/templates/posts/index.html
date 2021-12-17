@@ -22,7 +22,7 @@
         {{ post.text }}
       </p>
       {% if post.group.slug %}
-        <a href="{% url 'posts:group_list' posts.group.slug %}">все записи группы</a>
+        <a href="{% url 'posts:group_posts' post.group.slug %}">все записи группы</a>
       {% endif%}
       {% if not forloop.last %}<hr>{% endif %}
     {% endfor %} 
