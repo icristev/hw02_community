@@ -91,7 +91,7 @@ def post_edit(request, post_id):
             post = form.save(commit=False)
             post.author = request.user
             form.save()
-            return redirect('/posts/<post_id>/edit/')
+            return redirect('/posts/<post_id>/')
             # return redirect('posts:profile', post.author)
         return render(request, 'posts/create_post.html', {'form': form})
     is_edit = True
