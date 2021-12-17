@@ -72,7 +72,7 @@ def post_create(request):
             post = form.save(commit=False)
             post.author = request.user
             post.save()
-            return redirect('/profile/<username>/')
+            return redirect('posts:profile', request.user)
         return render(request, template, {'form': form})
     form = PostForm()
     is_edit = True
