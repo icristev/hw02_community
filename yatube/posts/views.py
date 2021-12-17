@@ -59,8 +59,7 @@ def post_detail(request, post_id):
     user = get_object_or_404(User, username=post.author)
     count = Post.objects.filter(author_id=user).all().count()
     context = {'post': post, 'post_count': count}
-# отсюда
-# досюдова код находился в edit внизу
+
     return render(request, template, context)
 
 
@@ -73,7 +72,7 @@ def post_create(request):
             post = form.save(commit=False)
             post.author = request.user
             post.save()
-            return redirect('/profile/<args=(request.user.username)>/')
+            return redirect('/profile/<username>/')
         return render(request, template, {'form': form})
     form = PostForm()
     is_edit = True
@@ -92,7 +91,8 @@ def post_edit(request, post_id):
             post = form.save(commit=False)
             post.author = request.user
             form.save()
-            return redirect('posts:profile', post.author)
+            return redirect('/posts/<post_id>/edit/')
+            # return redirect('posts:profile', post.author)
         return render(request, 'posts/create_post.html', {'form': form})
     is_edit = True
     template = 'posts/create_post.html'
