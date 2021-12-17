@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect, render
-from django.contrib.auth.models import User
 
 from .forms import PostForm
 from .models import Group, Post
@@ -92,7 +92,6 @@ def post_edit(request, post_id):
             post.author = request.user
             form.save()
             return redirect('posts:post_detail', post_id)
-            # return redirect('posts:profile', post.author)
         return render(request, 'posts/create_post.html', {'form': form})
     is_edit = True
     template = 'posts/create_post.html'
