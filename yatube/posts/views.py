@@ -60,14 +60,6 @@ def post_detail(request, post_id):
     count = Post.objects.filter(author_id=user).all().count()
     context = {'post': post, 'post_count': count}
 # отсюда
-    if request.method == 'POST':
-        form = PostForm(request.POST, instance=post)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.author = request.user
-            form.save()
-            return redirect('posts:profile', post.author)
-        return render(request, 'posts/create_post.html', {'form': form})
 # досюдова код находился в edit внизу
     return render(request, template, context)
 
@@ -94,6 +86,14 @@ def post_create(request):
 def post_edit(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     form = PostForm(instance=post)
+    if request.method == 'POST':
+        form = PostForm(request.POST, instance=post)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            form.save()
+            return redirect('posts:profile', post.author)
+        return render(request, 'posts/create_post.html', {'form': form})
     is_edit = True
     template = 'posts/create_post.html'
     context = {
