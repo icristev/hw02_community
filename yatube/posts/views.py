@@ -35,7 +35,7 @@ def group_posts(request, slug):
 
 
 def profile(request, username):
-    user = get_object_or_404(User, username=username)
+    username = get_object_or_404(User, username=username)
     post_user_list = Post.objects.select_related('author', 'group').all()
     number_of_posts = post_user_list.count()
     author = get_object_or_404(User, username=username)
@@ -45,7 +45,7 @@ def profile(request, username):
     page_obj = paginator.get_page(page_number)
     title = username
     context = {
-        'user': user,
+        'username': username,
         'number_of_posts': number_of_posts,
         'page_obj': page_obj,
         'title': title,
