@@ -1,13 +1,11 @@
 {% extends 'base.html' %} 
+
 {% block title %}
   Это главная страница проекта Yatube
 {% endblock title%}
-</head>
-<body>
-<main>
-  <div class="container py-5">
-    {% block content %}
-      <h1>Последние обновления на сайте</h1>
+
+{% block content %}
+    <h1>Последние обновления на сайте</h1>
     <article>
     {% for post in page_obj %}
       <ul>
@@ -27,6 +25,5 @@
       {% if not forloop.last %}<hr>{% endif %}
     {% endfor %} 
     </article>
-  </div>
-  {% include 'includes/paginator.html' %}
-   {% endblock %}  
+  {% include 'posts/includes/paginator.html' %}
+{% endblock %}  

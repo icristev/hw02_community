@@ -3,61 +3,63 @@ from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect, render
 
+from yatube.settings import POSTS_ON_INDEX
+
 from .forms import PostForm
 from .models import Group, Post
 
 
-def index(request):
-    template = 'posts/index.html'
-    posts = Post.objects.all().order_by('-pub_date')
-    paginator = Paginator(posts, 10)
+def get_page(request, post_list):
+    paginator = Paginator(post_list, POSTS_ON_INDEX)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    return page_obj
+
+
+def index(request):
+    template = 'posts/index.html'
+    posts = Post.objects.all()
+
     context = {
-        'page_obj': page_obj,
+        'page_obj': get_page(request, posts),
     }
+
     return render(request, template, context)
 
 
 def group_posts(request, slug):
     template = 'posts/group_list.html'
     group = get_object_or_404(Group, slug=slug)
-    posts = group.posts.all()[:10]
-    paginator = Paginator(posts, 10)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+    posts = group.posts.all()
+
     context = {
-        'page_obj': page_obj,
-        'posts': posts,
         'group': group,
+        'posts': posts,
+        'page_obj': get_page(request, posts),
     }
+
     return render(request, template, context)
 
 
 def profile(request, username):
-    username = get_object_or_404(User, username=username)
-    post_user_list = Post.objects.select_related('author', 'group').all()
-    number_of_posts = post_user_list.count()
+    template = 'posts/profile.html'
     author = get_object_or_404(User, username=username)
-    post_list = author.posts.all()
-    paginator = Paginator(post_list, 10)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    title = username
+    posts = author.posts.all()
+    number_of_posts = posts.count()
     context = {
-        'username': username,
+        'page_obj': get_page(request, posts),
+        'author': author,
+        'posts': posts,
         'number_of_posts': number_of_posts,
-        'page_obj': page_obj,
-        'title': title,
     }
-    return render(request, 'posts/profile.html', context)
+    return render(request, template, context)
 
 
 def post_detail(request, post_id):
     template = 'posts/post_detail.html'
     post = get_object_or_404(Post, id=post_id)
-    user = get_object_or_404(User, username=post.author)
-    count = Post.objects.filter(author_id=user).all().count()
+    author = post.author
+    count = author.posts.all().count()
     context = {'post': post, 'post_count': count}
 
     return render(request, template, context)
@@ -67,7 +69,7 @@ def post_detail(request, post_id):
 def post_create(request):
     template = 'posts/create_post.html'
     if request.method == 'POST':
-        form = PostForm(request.POST)
+        form = PostForm(request.POST or None)
         if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user
@@ -86,10 +88,8 @@ def post_edit(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     form = PostForm(instance=post)
     if request.method == 'POST':
-        form = PostForm(request.POST, instance=post)
+        form = PostForm(request.POST or None, instance=post)
         if form.is_valid():
-            post = form.save(commit=False)
-            post.author = request.user
             form.save()
             return redirect('posts:post_detail', post_id)
         return render(request, 'posts/create_post.html', {'form': form})

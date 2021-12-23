@@ -12,9 +12,6 @@
       <ul>
         <li>
           Автор: {{ author.username }}
-        </li>
-          <a href="{% url 'posts:profile' post.author.username %}">все посты пользователя</a>
-        </li>
         <li>
           Дата публикации: {{post.pub_date|date:"j E Y"}}
         </li>
@@ -22,14 +19,21 @@
       <p>
         {{ post.text }}
       </p>
-      <a href="{% url 'posts:post_detail' post.pk %}">Подробная информация </a>
-      {% if post.group is not None %}      
-        <a href="{% url 'posts:group_posts' post.group.slug %}">Все записи группы</a> 
-      {% endif %}       
+
+      <ul>
+        <li>
+          <a href="{% url 'posts:post_detail' post.pk %}">Подробная информация </a>
+        <li>
+          {% if post.group is not None %}      
+            <a href="{% url 'posts:group_posts' post.group.slug %}">Все записи группы</a> 
+          {% endif %}
+        </li>
+      </ul>   
+
     {% if not forloop.last %}<hr>{% endif %}
     </article>
     {% endfor %}
 
-    {% include 'includes/paginator.html' %}    
+    {% include 'posts/includes/paginator.html' %}    
   </div>
 {% endblock %}
