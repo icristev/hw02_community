@@ -89,6 +89,6 @@ def post_edit(request, post_id):
     form = PostForm(request.POST or None, instance=post)
     if form.is_valid():
         form.save()
-        return redirect('post', post_id=post_id, username=request.user)
+        return redirect('post', post_id=post_id)
     return render(request, template,
                   {'post': post, 'form': form, 'is_edit': True})
